@@ -8,10 +8,10 @@ namespace Calculator
         {
             Console.WriteLine(
                 "Do you want to calculate:\n" +
-                "1) 2 numbers;\n" +
-                "2) Factorial of the number;\n" +
-                "Choose 1 or 2");
-            Console.WriteLine();
+                "1) Calculate numbers;\n" +
+                "2) Factorial of the number;\n");
+            Console.Write("Your choice: ");
+ 
             uint answer = Convert.ToUInt32(Console.ReadLine());
             switch (answer)
             {
@@ -19,7 +19,8 @@ namespace Calculator
                     break;
                 case 2: Factorial(); 
                     break;
-
+                default:
+                    break;
             }
             Console.WriteLine();
   
@@ -41,41 +42,89 @@ namespace Calculator
             {
                 Console.WriteLine(
                "1) Enter 1st number;\n" +
-               "2) Enter 2nd number;\n" +
-               "3) Choose the operation (+, -, *, /, %)");
-                Console.WriteLine();
+               "2) Choose the operation (+, -, *, /, %)\n" +
+               "3) Enter 2nd number;" +
+               "* You can enter \"qqq\" to exit the calculaton at any step.\n");
 
-                double a = EnterNum();
-                double b = EnterNum();
+                double firstValue = 0;
+                bool isFirstValueSet = false;
 
-                char symbol = Convert.ToChar(Console.ReadLine());
-                switch (symbol)
+                while (true)
                 {
-                    case '+':
-                        Console.WriteLine($"{a + b}");
-                        break;
-                    case '-':
-                        Console.WriteLine($"{a - b}");
-                        break;
-                    case '*':
-                        Console.WriteLine($"{a * b}");
-                        break;
-                    case '/':
-                        Console.WriteLine($"{a / b}");
-                        break;
-                    case '%':
-                        Console.WriteLine($"{a % b}");
-                        break;
-                    default:
-                        Console.WriteLine("Wrong operation");
-                        break;
-                }
+                    if (!isFirstValueSet)
+                    {
+                        string firstInput = Console.ReadLine();
 
+                        if (firstInput.ToLower() == "qqq")
+                            break;
 
-                double EnterNum()
-                {
-                    double num = Convert.ToDouble(Console.ReadLine());
-                    return num;
+                        try
+                        {
+                            firstValue = double.Parse(firstInput);
+                            isFirstValueSet = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: " + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        string operatorInput = Console.ReadLine();
+
+                        if (operatorInput.ToLower() == "qqq")
+                            break;
+
+                        if (operatorInput != "+" && operatorInput != "-" && operatorInput != "*" && operatorInput != "/" && operatorInput != "%")
+                        {
+                            Console.WriteLine("Error: Invalid operator.");
+                            continue;
+                        }
+
+                        string secondInput = Console.ReadLine();
+
+                        if (secondInput.ToLower() == "qqq")
+                            break;
+
+                        try
+                        {
+                            double secondValue = double.Parse(secondInput);
+                            double result = 0;
+
+                            switch (operatorInput)
+                            {
+                                case "+":
+                                    result = firstValue + secondValue;
+                                    break;
+                                case "-":
+                                    result = firstValue - secondValue;
+                                    break;
+                                case "*":
+                                    result = firstValue * secondValue;
+                                    break;
+                                case "/":
+                                    if (secondValue != 0)
+                                        result = firstValue / secondValue;
+                                    else
+                                        Console.WriteLine("Error: Division by zero is not allowed.");
+                                    break;
+                                case "%": 
+                                    result = firstValue % secondValue;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            Console.WriteLine("= " + result);
+                            firstValue = result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: " + ex.Message);
+                        }
+                    }
+
+                    // Console.WriteLine();
                 }
             }
         }
